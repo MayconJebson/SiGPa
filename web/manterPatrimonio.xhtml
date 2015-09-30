@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">      
+    <h:head>
+        <title>Cadastro de Patrimônio</title>
+    </h:head>
+    <h:body>
+        <h:link value="Voltar ao menu principal" outcome="index.html"/>
+        <br/>
+        <br/>
+        <center><h1>Cadastro de Patrimônio</h1></center>
+        <br/>
+        <h:form id="formPatrimonio" class="form-horizontal">
+            <div class="control-group">
+                <colgroup><col align="right"></col><col align="left"></col></colgroup>
+                <h:inputHidden value="#{patrimonioBean.patrimonio.id}"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="numPatrimonio" value="Número:" />  
+                    <p:inputMask id="numPatrimonio" mask="9999999999"
+                                 value="#{patrimonioBean.patrimonio.numPatrimonio}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="numPatrimonio" />
+                    <p:outputLabel for="nomePatrimonio" value="Nome:" />  
+                    <p:inputText id="nomePatrimonio"  
+                                 value="#{patrimonioBean.patrimonio.nome}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="nomePatrimonio" />
+                    <p:outputLabel for="desc" value="Descrição:" />  
+                    <p:inputTextarea id="desc"  
+                                 value="#{patrimonioBean.patrimonio.descricao}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="desc" />
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Inserir" update="formPatrimonio, :tabela" class="button2" action="#{patrimonioBean.inserir()}"/>
+                <p:commandButton value="Alterar" update="formPatrimonio, :tabela" class="button2" action="#{patrimonioBean.alterar()}"/>
+                <p:commandButton value="Excluir" update="formPatrimonio, :tabela" class="button2" action="#{patrimonioBean.excluir()}"/>
+                <p:messages for="formPatrimonio"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="tabela">
+            <p:dataTable id="dataTable" var="p" value="#{patrimonioBean.patrimonios}" paginator="true" rows="5"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15,20,25">
+                <f:facet name="header">  
+                    <h:outputText value="Todos os Patrimônios" /> 
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Número/Código" />
+                    </f:facet>
+                    <p:commandLink value="#{p.numPatrimonio}" update=":formPatrimonio" >
+                        <f:setPropertyActionListener value="#{p}" target="#{patrimonioBean.patrimonio}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome" />
+                    </f:facet>
+                    <p:commandLink value="#{p.nome}" update=":formPatrimonio" >
+                        <f:setPropertyActionListener value="#{p}" target="#{patrimonioBean.patrimonio}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Descrição" />
+                    </f:facet>
+                    <p:commandLink value="#{p.descricao}" update=":formPatrimonio" >
+                        <f:setPropertyActionListener value="#{p}" target="#{patrimonioBean.patrimonio}"/> 
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

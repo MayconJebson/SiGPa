@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">      
+    <h:head>
+        <title>Cadastro de Pessoas</title>
+    </h:head>
+    <h:body>
+        <h:link value="Voltar ao menu principal" outcome="index.html"/>
+        <br/>
+        <br/>
+        <center><h1>Cadastro de Pessoas</h1></center>
+        <br/>
+        <h:form id="formPessoa" class="form-horizontal">
+            <div class="control-group">
+                <colgroup><col align="right"></col><col align="left"></col></colgroup>
+                <h:inputHidden value="#{pessoaBean.pessoa.id}"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="nomePessoa" value="Nome:" />  
+                    <p:inputText id="nomePessoa"  
+                                 value="#{pessoaBean.pessoa.nome}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="nomePessoa" />
+                    <p:outputLabel for="cpfPessoa" value="CPF:" />  
+                    <p:inputMask id="cpfPessoa"  
+                                 value="#{pessoaBean.pessoa.cpf}" mask="999.999.999-99"
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="cpfPessoa" />
+                    <p:outputLabel for="rgPessoa" value="RG:" />  
+                    <p:inputMask id="rgPessoa" mask="999.999.999"
+                                 value="#{pessoaBean.pessoa.rg}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="rgPessoa" />
+                    <p:outputLabel for="siapePessoa" value="SIAPE:" />  
+                    <p:inputMask id="siapePessoa" mask="9999999"
+                                 value="#{pessoaBean.pessoa.siape}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="siapePessoa" />
+                    <p:outputLabel for="cargoPessoa" value="Cargo:" />
+                    <p:selectOneMenu id="cargoPessoa" value="#{pessoaBean.pessoa.cargo}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItem itemLabel="Professor" itemValue="professor" />
+                        <f:selectItem itemLabel="Técnico" itemValue="tecnico" />
+                    </p:selectOneMenu>
+                    <p:message for="cargoPessoa" />
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Inserir" update="formPessoa, :tabela" class="button2" action="#{pessoaBean.inserir()}"/>
+                <p:commandButton value="Alterar" update="formPessoa, :tabela" class="button2" action="#{pessoaBean.alterar()}"/>
+                <p:commandButton value="Excluir" update="formPessoa, :tabela" class="button2" action="#{pessoaBean.excluir()}"/>
+                <p:messages for="formPessoa"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="tabela">
+            <p:dataTable id="dataTable" var="p" value="#{pessoaBean.pessoas}" paginator="true" rows="5"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15,20,25">
+                <f:facet name="header">  
+                    <h:outputText value="Todas as Pessoas" /> 
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome" />
+                    </f:facet>
+                    <p:commandLink value="#{p.nome}" update=":formPessoa" >
+                        <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="CPF" />
+                    </f:facet>
+                    <p:commandLink value="#{p.cpf}" update=":formPessoa" >
+                        <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="RG" />
+                    </f:facet>
+                    <p:commandLink value="#{p.rg}" update=":formPessoa" >
+                        <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="SIAPE" />
+                    </f:facet>
+                    <p:commandLink value="#{p.siape}" update=":formPessoa" >
+                        <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="CARGO" />
+                    </f:facet>
+                    <p:commandLink value="#{p.cargo}" update=":formPessoa" >
+                        <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
