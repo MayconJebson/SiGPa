@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">      
+    <h:head>
+        <title>Cadastro de Locais</title>
+    </h:head>
+    <h:body id="localCompleto">
+        <h:link value="Voltar ao menu principal" outcome="index.html"/>
+        <br/>
+        <br/>
+        <center><h1>Cadastro de Locais</h1></center>
+        <br/>
+        <h:form id="formLocal" class="form-horizontal">
+            <div class="control-group">
+                <colgroup><col align="right"></col><col align="left"></col></colgroup>
+                <h:inputHidden value="#{localBean.local.id}"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="nomeLocal" value="Nome:" />  
+                    <p:inputText id="nomeLocal"  
+                                 value="#{localBean.local.nome}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="nomeLocal" />
+                    <p:outputLabel for="respLocal" value="RESPONSÁVEL:" /> 
+                    <p:selectOneMenu id="respLocal" value="#{localBean.responsavel.id}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{pessoaBean.mostrarPessoas()}" var="resp" itemLabel="#{resp.nome} - #{resp.cargo}" itemValue="#{resp.id}"/>
+                    </p:selectOneMenu>
+                    <p:message for="respLocal" />
+                    <p:outputLabel for="departLocal" value="DEPARTAMENTO:" /> 
+                    <p:selectOneMenu id="departLocal" value="#{localBean.departamento.id}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{departamentoBean.mostrarDepartamentos()}" var="depar" itemLabel="#{depar.nome} - #{depar.sigla}" itemValue="#{depar.id}"/>
+                    </p:selectOneMenu>
+                    <p:message for="departLocal" />
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Inserir" update="formLocal, :tabela" class="button2" action="#{localBean.inserir()}"/>
+                <p:commandButton value="Alterar" update="formLocal, :tabela" class="button2" action="#{localBean.alterar()}"/>
+                <p:commandButton value="Excluir" update="formLocal, :tabela" class="button2" action="#{localBean.excluir()}"/>
+                <p:commandButton value="Limpar" update="formLocal" class="button2" action="#{localBean.limpar()}"/>
+                <p:messages for="formLocal"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="tabela">
+            <p:dataTable id="dataTable" var="l" value="#{localBean.locais}" paginator="true" rows="5"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15,20,25">
+                <f:facet name="header">  
+                    <h:outputText value="Todos os Locais" /> 
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome" />
+                    </f:facet>
+                    <p:commandLink value="#{l.nome}" update=":formLocal" >
+                        <f:setPropertyActionListener value="#{l}" target="#{localBean.local}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Responsável" />
+                    </f:facet>
+                    <p:commandLink value="#{l.responsavel.nome}" update=":formLocal" >
+                        <f:setPropertyActionListener value="#{l}" target="#{localBean.local}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Departamento" />
+                    </f:facet>
+                    <p:commandLink value="#{l.departamento.nome} - #{l.departamento.sigla}" update=":formLocal" >
+                        <f:setPropertyActionListener value="#{l}" target="#{localBean.local}"/> 
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
+

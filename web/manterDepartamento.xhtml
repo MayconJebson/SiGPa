@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">      
+    <h:head>
+        <title>Cadastro de Departamentos</title>
+    </h:head>
+    <h:body>
+        <h:link value="Voltar ao menu principal" outcome="index.html"/>
+        <br/>
+        <br/>
+        <center><h1>Cadastro de Departamentos</h1></center>
+        <br/>
+        <h:form id="formDepartamento" class="form-horizontal">
+            <div class="control-group">
+                <colgroup><col align="right"></col><col align="left"></col></colgroup>
+                <h:inputHidden value="#{departamentoBean.departamento.id}"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="nomeDepart" value="Nome:" />  
+                    <p:inputText id="nomeDepart"  
+                                 value="#{departamentoBean.departamento.nome}"  
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="nomeDepart" />
+                    <p:outputLabel for="siglaDepart" value="SIGLA:" />  
+                    <p:inputText id="siglaDepart"  
+                                 value="#{departamentoBean.departamento.sigla}"
+                                 requiredMessage="Campo Obrigatório" required="true"/>  
+                    <p:message for="siglaDepart" />
+                    <p:outputLabel for="chefeDepart" value="CHEFE:" /> 
+                    <p:selectOneMenu id="chefeDepart" value="#{departamentoBean.chefe.id}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{pessoaBean.mostrarPessoas()}" var="ch" itemLabel="#{ch.nome} - #{ch.cargo}" itemValue="#{ch.id}"/>
+                    </p:selectOneMenu>
+                    <p:message for="chefeDepart" />
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Inserir" update="formDepartamento, :tabela" class="button2" action="#{departamentoBean.inserir()}"/>
+                <p:commandButton value="Alterar" update="formDepartamento, :tabela" class="button2" action="#{departamentoBean.alterar()}"/>
+                <p:commandButton value="Excluir" update="formDepartamento, :tabela" class="button2" action="#{departamentoBean.excluir()}"/>
+                <p:commandButton value="Limpar" update="formDepartamento, :tabela" class="button2" action="#{departamentoBean.limpar()}"/>
+                <p:messages for="formDepartamento"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="tabela">
+            <p:dataTable id="dataTable" var="d" value="#{departamentoBean.departamentos}" paginator="true" rows="5"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15,20,25">
+                <f:facet name="header">  
+                    <h:outputText value="Todos os Departamentos" /> 
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome" />
+                    </f:facet>
+                    <p:commandLink value="#{d.nome}" update=":formDepartamento" >
+                        <f:setPropertyActionListener value="#{d}" target="#{departamentoBean.departamento}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Sigla" />
+                    </f:facet>
+                    <p:commandLink value="#{d.sigla}" update=":formDepartamento" >
+                        <f:setPropertyActionListener value="#{d}" target="#{departamentoBean.departamento}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Chefe" />
+                    </f:facet>
+                    <p:commandLink value="#{d.chefe.nome}" update=":formDepartamento" >
+                        <f:setPropertyActionListener value="#{d}" target="#{departamentoBean.departamento}"/> 
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

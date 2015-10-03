@@ -12,12 +12,12 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import modelos.Pessoa;
+import modelos.Local;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import modelos.Departamento;
-import modelos.Local;
 
 /**
  *
@@ -35,11 +35,8 @@ public class DepartamentoJpaController implements Serializable {
     }
 
     public void create(Departamento departamento) {
-        if (departamento.getPessoas() == null) {
-            departamento.setPessoas(new ArrayList<Pessoa>());
-        }
-        if (departamento.getListLocais() == null) {
-            departamento.setListLocais(new ArrayList<Local>());
+        if (departamento.getLocais() == null) {
+            departamento.setLocais(new ArrayList<Local>());
         }
         EntityManager em = null;
         try {
@@ -50,18 +47,12 @@ public class DepartamentoJpaController implements Serializable {
                 chefe = em.getReference(chefe.getClass(), chefe.getId());
                 departamento.setChefe(chefe);
             }
-            List<Pessoa> attachedPessoas = new ArrayList<Pessoa>();
-            for (Pessoa pessoasPessoaToAttach : departamento.getPessoas()) {
-                pessoasPessoaToAttach = em.getReference(pessoasPessoaToAttach.getClass(), pessoasPessoaToAttach.getId());
-                attachedPessoas.add(pessoasPessoaToAttach);
+            List<Local> attachedLocais = new ArrayList<Local>();
+            for (Local locaisLocalToAttach : departamento.getLocais()) {
+                locaisLocalToAttach = em.getReference(locaisLocalToAttach.getClass(), locaisLocalToAttach.getId());
+                attachedLocais.add(locaisLocalToAttach);
             }
-            departamento.setPessoas(attachedPessoas);
-            List<Local> attachedListLocais = new ArrayList<Local>();
-            for (Local listLocaisLocalToAttach : departamento.getListLocais()) {
-                listLocaisLocalToAttach = em.getReference(listLocaisLocalToAttach.getClass(), listLocaisLocalToAttach.getId());
-                attachedListLocais.add(listLocaisLocalToAttach);
-            }
-            departamento.setListLocais(attachedListLocais);
+            departamento.setLocais(attachedLocais);
             em.persist(departamento);
             if (chefe != null) {
                 Departamento oldDepartamentoOfChefe = chefe.getDepartamento();
@@ -72,22 +63,13 @@ public class DepartamentoJpaController implements Serializable {
                 chefe.setDepartamento(departamento);
                 chefe = em.merge(chefe);
             }
-            for (Pessoa pessoasPessoa : departamento.getPessoas()) {
-                Departamento oldDepartamentoOfPessoasPessoa = pessoasPessoa.getDepartamento();
-                pessoasPessoa.setDepartamento(departamento);
-                pessoasPessoa = em.merge(pessoasPessoa);
-                if (oldDepartamentoOfPessoasPessoa != null) {
-                    oldDepartamentoOfPessoasPessoa.getPessoas().remove(pessoasPessoa);
-                    oldDepartamentoOfPessoasPessoa = em.merge(oldDepartamentoOfPessoasPessoa);
-                }
-            }
-            for (Local listLocaisLocal : departamento.getListLocais()) {
-                Departamento oldDepartamentoOfListLocaisLocal = listLocaisLocal.getDepartamento();
-                listLocaisLocal.setDepartamento(departamento);
-                listLocaisLocal = em.merge(listLocaisLocal);
-                if (oldDepartamentoOfListLocaisLocal != null) {
-                    oldDepartamentoOfListLocaisLocal.getListLocais().remove(listLocaisLocal);
-                    oldDepartamentoOfListLocaisLocal = em.merge(oldDepartamentoOfListLocaisLocal);
+            for (Local locaisLocal : departamento.getLocais()) {
+                Departamento oldDepartamentoOfLocaisLocal = locaisLocal.getDepartamento();
+                locaisLocal.setDepartamento(departamento);
+                locaisLocal = em.merge(locaisLocal);
+                if (oldDepartamentoOfLocaisLocal != null) {
+                    oldDepartamentoOfLocaisLocal.getLocais().remove(locaisLocal);
+                    oldDepartamentoOfLocaisLocal = em.merge(oldDepartamentoOfLocaisLocal);
                 }
             }
             em.getTransaction().commit();
@@ -98,7 +80,7 @@ public class DepartamentoJpaController implements Serializable {
         }
     }
 
-    public void edit(Departamento departamento) throws NonexistentEntityException, Exception {
+    /*public void edit(Departamento departamento) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -106,28 +88,19 @@ public class DepartamentoJpaController implements Serializable {
             Departamento persistentDepartamento = em.find(Departamento.class, departamento.getId());
             Pessoa chefeOld = persistentDepartamento.getChefe();
             Pessoa chefeNew = departamento.getChefe();
-            List<Pessoa> pessoasOld = persistentDepartamento.getPessoas();
-            List<Pessoa> pessoasNew = departamento.getPessoas();
-            List<Local> listLocaisOld = persistentDepartamento.getListLocais();
-            List<Local> listLocaisNew = departamento.getListLocais();
+            List<Local> locaisOld = persistentDepartamento.getLocais();
+            List<Local> locaisNew = departamento.getLocais();
             if (chefeNew != null) {
                 chefeNew = em.getReference(chefeNew.getClass(), chefeNew.getId());
                 departamento.setChefe(chefeNew);
             }
-            List<Pessoa> attachedPessoasNew = new ArrayList<Pessoa>();
-            for (Pessoa pessoasNewPessoaToAttach : pessoasNew) {
-                pessoasNewPessoaToAttach = em.getReference(pessoasNewPessoaToAttach.getClass(), pessoasNewPessoaToAttach.getId());
-                attachedPessoasNew.add(pessoasNewPessoaToAttach);
+            List<Local> attachedLocaisNew = new ArrayList<Local>();
+            for (Local locaisNewLocalToAttach : locaisNew) {
+                locaisNewLocalToAttach = em.getReference(locaisNewLocalToAttach.getClass(), locaisNewLocalToAttach.getId());
+                attachedLocaisNew.add(locaisNewLocalToAttach);
             }
-            pessoasNew = attachedPessoasNew;
-            departamento.setPessoas(pessoasNew);
-            List<Local> attachedListLocaisNew = new ArrayList<Local>();
-            for (Local listLocaisNewLocalToAttach : listLocaisNew) {
-                listLocaisNewLocalToAttach = em.getReference(listLocaisNewLocalToAttach.getClass(), listLocaisNewLocalToAttach.getId());
-                attachedListLocaisNew.add(listLocaisNewLocalToAttach);
-            }
-            listLocaisNew = attachedListLocaisNew;
-            departamento.setListLocais(listLocaisNew);
+            locaisNew = attachedLocaisNew;
+            departamento.setLocais(locaisNew);
             departamento = em.merge(departamento);
             if (chefeOld != null && !chefeOld.equals(chefeNew)) {
                 chefeOld.setDepartamento(null);
@@ -142,40 +115,46 @@ public class DepartamentoJpaController implements Serializable {
                 chefeNew.setDepartamento(departamento);
                 chefeNew = em.merge(chefeNew);
             }
-            for (Pessoa pessoasOldPessoa : pessoasOld) {
-                if (!pessoasNew.contains(pessoasOldPessoa)) {
-                    pessoasOldPessoa.setDepartamento(null);
-                    pessoasOldPessoa = em.merge(pessoasOldPessoa);
+            for (Local locaisOldLocal : locaisOld) {
+                if (!locaisNew.contains(locaisOldLocal)) {
+                    locaisOldLocal.setDepartamento(null);
+                    locaisOldLocal = em.merge(locaisOldLocal);
                 }
             }
-            for (Pessoa pessoasNewPessoa : pessoasNew) {
-                if (!pessoasOld.contains(pessoasNewPessoa)) {
-                    Departamento oldDepartamentoOfPessoasNewPessoa = pessoasNewPessoa.getDepartamento();
-                    pessoasNewPessoa.setDepartamento(departamento);
-                    pessoasNewPessoa = em.merge(pessoasNewPessoa);
-                    if (oldDepartamentoOfPessoasNewPessoa != null && !oldDepartamentoOfPessoasNewPessoa.equals(departamento)) {
-                        oldDepartamentoOfPessoasNewPessoa.getPessoas().remove(pessoasNewPessoa);
-                        oldDepartamentoOfPessoasNewPessoa = em.merge(oldDepartamentoOfPessoasNewPessoa);
+            for (Local locaisNewLocal : locaisNew) {
+                if (!locaisOld.contains(locaisNewLocal)) {
+                    Departamento oldDepartamentoOfLocaisNewLocal = locaisNewLocal.getDepartamento();
+                    locaisNewLocal.setDepartamento(departamento);
+                    locaisNewLocal = em.merge(locaisNewLocal);
+                    if (oldDepartamentoOfLocaisNewLocal != null && !oldDepartamentoOfLocaisNewLocal.equals(departamento)) {
+                        oldDepartamentoOfLocaisNewLocal.getLocais().remove(locaisNewLocal);
+                        oldDepartamentoOfLocaisNewLocal = em.merge(oldDepartamentoOfLocaisNewLocal);
                     }
                 }
             }
-            for (Local listLocaisOldLocal : listLocaisOld) {
-                if (!listLocaisNew.contains(listLocaisOldLocal)) {
-                    listLocaisOldLocal.setDepartamento(null);
-                    listLocaisOldLocal = em.merge(listLocaisOldLocal);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Long id = departamento.getId();
+                if (findDepartamento(id) == null) {
+                    throw new NonexistentEntityException("The departamento with id " + id + " no longer exists.");
                 }
             }
-            for (Local listLocaisNewLocal : listLocaisNew) {
-                if (!listLocaisOld.contains(listLocaisNewLocal)) {
-                    Departamento oldDepartamentoOfListLocaisNewLocal = listLocaisNewLocal.getDepartamento();
-                    listLocaisNewLocal.setDepartamento(departamento);
-                    listLocaisNewLocal = em.merge(listLocaisNewLocal);
-                    if (oldDepartamentoOfListLocaisNewLocal != null && !oldDepartamentoOfListLocaisNewLocal.equals(departamento)) {
-                        oldDepartamentoOfListLocaisNewLocal.getListLocais().remove(listLocaisNewLocal);
-                        oldDepartamentoOfListLocaisNewLocal = em.merge(oldDepartamentoOfListLocaisNewLocal);
-                    }
-                }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
             }
+        }
+    }*/
+    
+    public void edit(Departamento departamento) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            departamento = em.merge(departamento);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -210,15 +189,10 @@ public class DepartamentoJpaController implements Serializable {
                 chefe.setDepartamento(null);
                 chefe = em.merge(chefe);
             }
-            List<Pessoa> pessoas = departamento.getPessoas();
-            for (Pessoa pessoasPessoa : pessoas) {
-                pessoasPessoa.setDepartamento(null);
-                pessoasPessoa = em.merge(pessoasPessoa);
-            }
-            List<Local> listLocais = departamento.getListLocais();
-            for (Local listLocaisLocal : listLocais) {
-                listLocaisLocal.setDepartamento(null);
-                listLocaisLocal = em.merge(listLocaisLocal);
+            List<Local> locais = departamento.getLocais();
+            for (Local locaisLocal : locais) {
+                locaisLocal.setDepartamento(null);
+                locaisLocal = em.merge(locaisLocal);
             }
             em.remove(departamento);
             em.getTransaction().commit();

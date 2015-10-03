@@ -7,6 +7,7 @@ package modelos;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,13 +30,10 @@ public class Departamento implements Serializable {
     @OneToOne
     private Pessoa chefe;
     
-    @OneToMany
-    private List<Pessoa> pessoas;
-    
     private String nome, sigla;
     
     @OneToMany
-    private List<Local> listLocais;
+    private List<Local> locais;
 
     /**
      * @return the id
@@ -63,20 +61,6 @@ public class Departamento implements Serializable {
      */
     public void setChefe(Pessoa chefe) {
         this.chefe = chefe;
-    }
-
-    /**
-     * @return the pessoas
-     */
-    public List<Pessoa> getPessoas() {
-        return pessoas;
-    }
-
-    /**
-     * @param pessoas the pessoas to set
-     */
-    public void setPessoas(List<Pessoa> pessoas) {
-        this.pessoas = pessoas;
     }
 
     /**
@@ -108,16 +92,16 @@ public class Departamento implements Serializable {
     }
 
     /**
-     * @return the listLocais
+     * @return the locais
      */
-    public List<Local> getListLocais() {
-        return listLocais;
+    public List<Local> getLocais() {
+        return locais;
     }
 
     /**
-     * @param listLocais the listLocais to set
+     * @param locais the locais to set
      */
-    public void setListLocais(List<Local> listLocais) {
-        this.listLocais = listLocais;
+    public void setLocais(List<Local> locais) {
+        this.locais = locais;
     }
 }

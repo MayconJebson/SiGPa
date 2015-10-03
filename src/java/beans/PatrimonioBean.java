@@ -15,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import modelos.Local;
 import modelos.Patrimonio;
 import util.JPAUtil;
 
@@ -29,11 +30,13 @@ public class PatrimonioBean {
     private Patrimonio patrimonio;
     PatrimonioJpaController daoPatrimonio;
     private List<Patrimonio> patrimonios;
+    private Local local;
     
     public PatrimonioBean(){
         patrimonio = new Patrimonio();
         daoPatrimonio = new PatrimonioJpaController(JPAUtil.factory);
         patrimonios = new ArrayList<Patrimonio>();
+        local = new Local();
         pesquisarPatrimonios();
     }
 
@@ -49,15 +52,18 @@ public class PatrimonioBean {
      */
     public void setPatrimonio(Patrimonio patrimonio) {
         this.patrimonio = patrimonio;
+        local = patrimonio.getLocal();
     }
     
     public void inserir(){
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             patrimonio.setId(null);
+            patrimonio.setLocal(local);
             daoPatrimonio.create(patrimonio);
-            context.addMessage("formPatrimonio", new FacesMessage("Patrimonio foi inserido com sucesso!"));
             patrimonio = new Patrimonio();
+            local = new Local();
+            context.addMessage("formPatrimonio", new FacesMessage("Patrimonio foi inserido com sucesso!"));
         } catch (Exception ex) {
             context.addMessage("formPatrimonio", new FacesMessage("Patrimonio não pode ser inserido"));
             Logger.getLogger(PatrimonioBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,8 +74,10 @@ public class PatrimonioBean {
     public void alterar(){
         FacesContext context = FacesContext.getCurrentInstance();
         try {
+            patrimonio.setLocal(local);
             daoPatrimonio.edit(patrimonio);
             patrimonio = new Patrimonio();
+            local = new Local();
             context.addMessage("formPatrimonio", new FacesMessage("Patrimônio foi alterado com sucesso!"));
         } catch (NonexistentEntityException ex) {
             context.addMessage("formPatrimonio", new FacesMessage("Error"));
@@ -86,6 +94,7 @@ public class PatrimonioBean {
         try {
             daoPatrimonio.destroy(patrimonio.getId());
             patrimonio = new Patrimonio();
+            local = new Local();
             context.addMessage("formPatrimonio", new FacesMessage("Patrimônio foi excluído com sucesso!"));
         } catch (NonexistentEntityException ex) {
             context.addMessage("formPatrimonio", new FacesMessage("Patrimônio não pode ser excluído"));
@@ -110,5 +119,24 @@ public class PatrimonioBean {
     
     public void pesquisarPatrimonios(){
         patrimonios = daoPatrimonio.findPatrimonioEntities();
+    }
+
+    /**
+     * @return the local
+     */
+    public Local getLocal() {
+        return local;
+    }
+
+    /**
+     * @param local the local to set
+     */
+    public void setLocal(Local local) {
+        this.local = local;
+    }
+    
+    public void limpar(){
+        local = new Local();
+        patrimonio = new Patrimonio();
     }
 }

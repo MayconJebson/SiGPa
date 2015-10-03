@@ -55,7 +55,7 @@ public class LocalJpaController implements Serializable {
             local.setListPatrimonios(attachedListPatrimonios);
             em.persist(local);
             if (departamento != null) {
-                departamento.getListLocais().add(local);
+                departamento.getLocais().add(local);
                 departamento = em.merge(departamento);
             }
             for (Patrimonio listPatrimoniosPatrimonio : local.getListPatrimonios()) {
@@ -75,7 +75,7 @@ public class LocalJpaController implements Serializable {
         }
     }
 
-    public void edit(Local local) throws NonexistentEntityException, Exception {
+    /*public void edit(Local local) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -98,11 +98,11 @@ public class LocalJpaController implements Serializable {
             local.setListPatrimonios(listPatrimoniosNew);
             local = em.merge(local);
             if (departamentoOld != null && !departamentoOld.equals(departamentoNew)) {
-                departamentoOld.getListLocais().remove(local);
+                departamentoOld.getLocais().remove(local);
                 departamentoOld = em.merge(departamentoOld);
             }
             if (departamentoNew != null && !departamentoNew.equals(departamentoOld)) {
-                departamentoNew.getListLocais().add(local);
+                departamentoNew.getLocais().add(local);
                 departamentoNew = em.merge(departamentoNew);
             }
             for (Patrimonio listPatrimoniosOldPatrimonio : listPatrimoniosOld) {
@@ -137,6 +137,29 @@ public class LocalJpaController implements Serializable {
                 em.close();
             }
         }
+    }*/
+    
+    public void edit(Local local) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            local = em.merge(local);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Long id = local.getId();
+                if (findLocal(id) == null) {
+                    throw new NonexistentEntityException("The local with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     public void destroy(Long id) throws NonexistentEntityException {
@@ -153,7 +176,7 @@ public class LocalJpaController implements Serializable {
             }
             Departamento departamento = local.getDepartamento();
             if (departamento != null) {
-                departamento.getListLocais().remove(local);
+                departamento.getLocais().remove(local);
                 departamento = em.merge(departamento);
             }
             List<Patrimonio> listPatrimonios = local.getListPatrimonios();

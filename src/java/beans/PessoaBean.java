@@ -56,10 +56,10 @@ public class PessoaBean {
         try {
             pessoa.setId(null);
             daoPessoa.create(pessoa);
-            context.addMessage("formPessoa", new FacesMessage("Pessoa foi inserido com sucesso!"));
             pessoa = new Pessoa();
+            context.addMessage("formPessoa", new FacesMessage("Pessoa foi inserida com sucesso!"));
         } catch (Exception ex) {
-            context.addMessage("formPessoa", new FacesMessage("Pessoa não pode ser inserido"));
+            context.addMessage("formPessoa", new FacesMessage("Pessoa não pode ser inserida"));
             Logger.getLogger(PessoaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         pesquisarPessoas();
@@ -110,5 +110,13 @@ public class PessoaBean {
     
     public void pesquisarPessoas(){
         pessoas = daoPessoa.findPessoaEntities();
+    }
+    
+    public List<Pessoa> mostrarPessoas(){
+        return daoPessoa.findPessoaEntities();
+    }
+    
+    public void limpar(){
+        pessoa = new Pessoa();
     }
 }

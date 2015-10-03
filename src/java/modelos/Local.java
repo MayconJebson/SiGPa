@@ -26,6 +26,8 @@ public class Local implements Serializable {
     private Long id;
     
     private String nome;
+    
+    @OneToOne
     private Pessoa responsavel;
     
     @OneToMany

@@ -28,11 +28,19 @@
                                  value="#{patrimonioBean.patrimonio.nome}"  
                                  requiredMessage="Campo Obrigatório" required="true"/>  
                     <p:message for="nomePatrimonio" />
-                    <p:outputLabel for="desc" value="Descrição:" />  
-                    <p:inputTextarea id="desc"  
+                    <p:outputLabel for="descPatrimonio" value="Descrição:" />  
+                    <p:inputTextarea id="descPatrimonio"  
                                  value="#{patrimonioBean.patrimonio.descricao}"  
                                  requiredMessage="Campo Obrigatório" required="true"/>  
-                    <p:message for="desc" />
+                    <p:message for="descPatrimonio" />
+                    <p:outputLabel for="localPatrimonio" value="Localização:" />
+                    <p:selectOneMenu id="localPatrimonio" value="#{patrimonioBean.local.id}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{localBean.mostrarLocais()}" var="local" itemLabel="#{local.nome} - #{local.responsavel.nome}" itemValue="#{local.id}"/>
+                    </p:selectOneMenu>
+                    <p:message for="localPatrimonio" />
                 </h:panelGrid>
                 <br/>
                 <p:commandButton value="Inserir" update="formPatrimonio, :tabela" class="button2" action="#{patrimonioBean.inserir()}"/>
@@ -70,6 +78,14 @@
                         <h:outputText value="Descrição" />
                     </f:facet>
                     <p:commandLink value="#{p.descricao}" update=":formPatrimonio" >
+                        <f:setPropertyActionListener value="#{p}" target="#{patrimonioBean.patrimonio}"/> 
+                    </p:commandLink>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Localização" />
+                    </f:facet>
+                    <p:commandLink value="#{p.local.nome} - #{p.local.responsavel.nome}" update=":formPatrimonio" >
                         <f:setPropertyActionListener value="#{p}" target="#{patrimonioBean.patrimonio}"/> 
                     </p:commandLink>
                 </p:column>
