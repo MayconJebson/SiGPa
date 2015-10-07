@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>SiGPa - Login</title><meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/login.css"/>
+        <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:inputHidden value="#{loginBean.logout()}"/>
+        </h:form>
+        <div id="loginbox">            
+            <h:form id="loginform" class="form-vertical">
+                <div class="control-group normal_text"> <h3>SiGPa - Sistema de Gerenciamento de Patrimônio</h3></div>
+                <div class="control-group">
+                    <div class="controls" id="divLogin">
+                        <div class="main_input_box">
+                            <i class="icon-user"></i>
+                            <h:outputLabel for="login" value="Login" />
+                            <h:inputText id="login" required="true" 
+                                               requiredMessage="Campo Obrigatório" 
+                                               value="#{loginBean.login.login}" /><br/>
+                            <h:message style="color: red" for="login"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="main_input_box">
+                            <i class="icon-lock"></i>
+                            <h:outputLabel for="senha" value="Senha" />
+                            <h:inputSecret id="senha" value="#{loginBean.login.senha}" 
+                                                 requiredMessage="Campo Obrigatório" required="true"/><br/>
+                            <h:message style="color: red" for="senha"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <h:messages for="loginform" style="color: red"/>
+                    <span class="pull-right"><h:commandButton class="btn btn-success" 
+                                                              value="Entrar" id="btLogin" 
+                                                              action="#{loginBean.logar()}"/></span>
+                </div>
+            </h:form>
+        </div>
+
+        <script src="js/jquery.min.js"></script>  
+        
+        <script src="js/jscript.login.js"></script>
+        
+        <script type="js/jquery.">
+            jQuery(function($){
+                history.back();
+            });
+        </script>
+        <script type="js/jquery.mask.js">
+            jQuery(function($){
+                $("#Usuario").mask("9999999999");
+            });
+        </script>
+    </h:body>
+</html>

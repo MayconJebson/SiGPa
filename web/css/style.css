@@ -191,7 +191,7 @@ p a:hover {
     margin: 8px 8px 8px 0;
     background-image: linear-gradient(to bottom, #FFFF00, #FFFF33);
     background-repeat: repeat-x;
-    width:100%;
+    //width:100%;
     cursor: pointer;
     border-radius: 7px;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
