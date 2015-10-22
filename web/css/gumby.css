@@ -75,6 +75,10 @@ html, body { height: 100%; min-height: 100%;  }
 .column.omega, .columns.omega { float: right; }
 
 /* Column Classes */
+/* add por maycon */
+.centerColumns {margin-left: 140px}
+
+
 .row .one.column { width: 6.38298%; }
 .row .one.columns { width: 6.38298%; }
 .row .two.columns { width: 14.89362%; }

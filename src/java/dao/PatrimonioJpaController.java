@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import modelos.Local;
@@ -165,4 +167,16 @@ public class PatrimonioJpaController implements Serializable {
         }
     }
     
+    public List<Patrimonio> pesquisarDepartamento(Long id_dep){
+        EntityManager em = getEntityManager();
+        TypedQuery<Patrimonio> query;
+        query = em.createQuery("select * from Patrimonio p where p.local_id=:id_dep)",
+                               Patrimonio.class);
+        query.setParameter("id_dep", id_dep);
+        try{
+            return query.getResultList();
+        }catch(NoResultException e){
+            return null;
+        }
+    }
 }

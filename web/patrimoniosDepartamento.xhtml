@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Bens do Departamento</title>
+        <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css.css" />
+        <link rel="stylesheet" href="css/gumby.css"/>   <!-- Gumby Framework /-->
+        <link rel="stylesheet" href="css/style.css"/>   <!-- Main stylesheet /-->
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:inputHidden value="#{loginBean.validarLogin()}"/>
+        </h:form>
+        <h:form>
+            <h:commandLink value="&lt; Menu Principal" action="#{relatoriosBean.redirecionarIndex()}"/>
+            <div class=" right">
+                <h:commandLink action="#{relatoriosBean.redirecionarLogin()}">
+                    <img class="icon-exit" src="img/exit.png"/>SAIR
+                </h:commandLink>
+            </div>
+        </h:form>
+        <br/>
+        <br/>
+        <center><h1>Mostrar Bens do Departamento</h1></center>
+        <br/>
+        <h:form id="formDepartamento" class="form-horizontal">
+            <div class="control-group">
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="depart" value="DEPARTAMENTO:" /> 
+                    <p:selectOneMenu id="depart" value="#{relatoriosBean.departamento.id}" 
+                                     style="width:125px" required="true" 
+                                     requiredMessage="Campo Obrigatório">
+                        <f:selectItem itemLabel="Selecione..." itemValue="" />
+                        <f:selectItems value="#{departamentoBean.mostrarDepartamentos()}" var="d" itemLabel="#{d.sigla} - #{d.nome}" itemValue="#{d.id}"/>
+                    </p:selectOneMenu>
+                    <p:message for="depart" />
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Pesquisar" update="formDepartamento, :tabela" class="button2" action="#{relatoriosBean.pesquisarPatrimoniosDepartamento()}"/>
+                <p:commandButton value="Limpar" update="formDepartamento, :tabela" class="button2" action="#{relatoriosBean.limparDepartamento()}"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="tabela">
+            <h:commandLink>
+                <img class="icon-exit" src="img/pdf.png"/>Exporte para PDF
+                <p:dataExporter type="pdf" target="dataTable" encoding="iso-8859-1" fileName="patrimonios do Departamento" preProcessor="#{relatoriosBean.preProcessPDFDepartamento}" />
+            </h:commandLink>
+            <br/><br/>
+            <p:dataTable id="dataTable" var="p" value="#{relatoriosBean.patrimonios}" paginator="true" rows="5"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15,20,25">
+                <f:facet name="header">  
+                    <h:outputText value="Todos os Patrimonios do Departamento" /> 
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Número" />
+                    </f:facet>
+                    <p:commandLink value="#{p.numPatrimonio}" update=":formDepartamento" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome" />
+                    </f:facet>
+                    <p:commandLink value="#{p.nome}" update=":formDepartamento" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Descrição" />
+                    </f:facet>
+                    <p:commandLink value="#{p.descricao}" update=":formDepartamento" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
