@@ -75,6 +75,12 @@
                     </f:facet>
                     <p:commandLink value="#{p.descricao}" update=":formDepartamento" />
                 </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Local" />
+                    </f:facet>
+                    <p:commandLink value="#{p.local.nome}" update=":formDepartamento" />
+                </p:column>
             </p:dataTable>
         </h:form>
     </h:body>

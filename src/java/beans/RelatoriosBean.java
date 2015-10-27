@@ -18,6 +18,7 @@ import dao.PatrimonioJpaController;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -60,6 +61,21 @@ public class RelatoriosBean implements Serializable{
                     patrimonios.add(p);
                 }
             }
+        }
+        
+        bubbleSort();
+    }
+    
+    public void bubbleSort(){
+        Patrimonio aux = new Patrimonio();
+        for(int i = 0; i < patrimonios.size(); i++){ 
+            for(int j = 0; j<patrimonios.size()-1; j++){ 
+                if(patrimonios.get(j).getLocal().getId() > patrimonios.get(j + 1).getLocal().getId()){ 
+                    aux = patrimonios.get(j); 
+                    patrimonios.set(j, patrimonios.get(j+1));
+                    patrimonios.set(j+1, aux);
+                } 
+            } 
         }
     }
     
