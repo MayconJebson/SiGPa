@@ -41,7 +41,7 @@ public class LoginBean {
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.html");
         }else{
             context.addMessage("loginform", new FacesMessage("Login e/ou Senha estão inválidos"));
-            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null);
+            //Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null);
             login = new Login();
             //FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
         }

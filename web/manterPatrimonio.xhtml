@@ -16,7 +16,12 @@
             <h:inputHidden value="#{loginBean.validarLogin()}"/>
         </h:form>
         <h:form>
-            <h:commandLink value="&lt; Menu Principal" action="#{loginBean.redirecionarIndex()}"/>
+            <br/>
+            <div class=" left">
+                <h:commandLink action="#{loginBean.redirecionarIndex()}">
+                    <img class="icon-exit" src="img/home-icon.png"/>Menu Principal
+                </h:commandLink>
+            </div>
             <div class=" right">
                 <h:commandLink action="#{loginBean.redirecionarLogin()}">
                     <img class="icon-exit" src="img/exit.png"/>SAIR
@@ -49,10 +54,10 @@
                     <p:message for="descPatrimonio" />
                     <p:outputLabel for="localPatrimonio" value="Localização:" />
                     <p:selectOneMenu id="localPatrimonio" value="#{patrimonioBean.local.id}" 
-                                     style="width:125px" required="true" 
+                                     style="width:225px" required="true" 
                                      requiredMessage="Campo Obrigatório">
                         <f:selectItem itemLabel="Selecione..." itemValue="" />
-                        <f:selectItems value="#{localBean.mostrarLocais()}" var="local" itemLabel="#{local.nome} - #{local.responsavel.nome}" itemValue="#{local.id}"/>
+                        <f:selectItems value="#{localBean.mostrarLocais()}" var="local" itemLabel="#{local.nome} - #{local.departamento.sigla}" itemValue="#{local.id}"/>
                     </p:selectOneMenu>
                     <p:message for="localPatrimonio" />
                 </h:panelGrid>

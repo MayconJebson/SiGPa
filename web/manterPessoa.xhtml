@@ -16,7 +16,12 @@
             <h:inputHidden value="#{loginBean.validarLogin()}"/>
         </h:form>
         <h:form>
-            <h:commandLink value="&lt; Menu Principal" action="#{loginBean.redirecionarIndex()}"/>
+            <br/>
+            <div class=" left">
+                <h:commandLink action="#{loginBean.redirecionarIndex()}">
+                    <img class="icon-exit" src="img/home-icon.png"/>Menu Principal
+                </h:commandLink>
+            </div>
             <div class=" right">
                 <h:commandLink action="#{loginBean.redirecionarLogin()}">
                     <img class="icon-exit" src="img/exit.png"/>SAIR
@@ -54,7 +59,7 @@
                     <p:message for="siapePessoa" />
                     <p:outputLabel for="cargoPessoa" value="Cargo:" />
                     <p:selectOneMenu id="cargoPessoa" value="#{pessoaBean.pessoa.cargo}" 
-                                     style="width:125px" required="true" 
+                                     style="width:225px" required="true" 
                                      requiredMessage="Campo Obrigatório">
                         <f:selectItem itemLabel="Selecione..." itemValue="" />
                         <f:selectItem itemLabel="Professor" itemValue="professor" />
@@ -74,13 +79,13 @@
         <h:form id="tabela">
             <p:dataTable id="dataTable" var="p" value="#{pessoaBean.pessoas}" paginator="true" rows="5"  
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                         rowsPerPageTemplate="5,10,15,20,25">
+                         rowsPerPageTemplate="5,10,15,20,25" style="width: 100%" >
                 <f:facet name="header">  
                     <h:outputText value="Todas as Pessoas" /> 
                 </f:facet>
-                <p:column>
+                <p:column style="width: 50%" >
                     <f:facet name="header">
-                        <h:outputText value="Nome" />
+                        <h:outputText value="Nome"/>
                     </f:facet>
                     <p:commandLink value="#{p.nome}" update=":formPessoa" >
                         <f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/> 

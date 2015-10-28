@@ -16,7 +16,12 @@
             <h:inputHidden value="#{loginBean.validarLogin()}"/>
         </h:form>
         <h:form>
-            <h:commandLink value="&lt; Menu Principal" action="#{loginBean.redirecionarIndex()}"/>
+            <br/>
+            <div class=" left">
+                <h:commandLink action="#{loginBean.redirecionarIndex()}">
+                    <img class="icon-exit" src="img/home-icon.png"/>Menu Principal
+                </h:commandLink>
+            </div>
             <div class=" right">
                 <h:commandLink action="#{loginBean.redirecionarLogin()}">
                     <img class="icon-exit" src="img/exit.png"/>SAIR
@@ -44,7 +49,7 @@
                     <p:message for="siglaDepart" />
                     <p:outputLabel for="chefeDepart" value="CHEFE:" /> 
                     <p:selectOneMenu id="chefeDepart" value="#{departamentoBean.chefe.id}" 
-                                     style="width:125px" required="true" 
+                                     style="width:225px" required="true" 
                                      requiredMessage="Campo Obrigatório">
                         <f:selectItem itemLabel="Selecione..." itemValue="" />
                         <f:selectItems value="#{pessoaBean.mostrarPessoas()}" var="ch" itemLabel="#{ch.nome} - #{ch.cargo}" itemValue="#{ch.id}"/>
