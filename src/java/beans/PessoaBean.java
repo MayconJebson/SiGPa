@@ -30,6 +30,8 @@ public class PessoaBean {
     PessoaJpaController daoPessoa;
     private List<Pessoa> pessoas;
     
+    private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+    
     public PessoaBean(){
         pessoa = new Pessoa();
         daoPessoa = new PessoaJpaController(JPAUtil.factory);
@@ -54,10 +56,18 @@ public class PessoaBean {
     public void inserir(){
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            pessoa.setId(null);
-            daoPessoa.create(pessoa);
-            pessoa = new Pessoa();
-            context.addMessage("formPessoa", new FacesMessage("Pessoa foi inserida com sucesso!"));
+            String cpf = pessoa.getCpf().substring(0,3) + pessoa.getCpf().substring(4,7) 
+                       + pessoa.getCpf().substring(8,11) + pessoa.getCpf().substring(12,14);
+            if (isValidCPF(cpf)){
+                pessoa.setId(null);
+                daoPessoa.create(pessoa);
+                pessoa = new Pessoa();
+                context.addMessage("formPessoa", new FacesMessage("Pessoa foi inserida com sucesso!"));
+            }
+            else{
+                pessoa.setCpf("");
+                context.addMessage("formPessoa", new FacesMessage("CPF Inválido, Insira outro CPF!"));
+            }
         } catch (Exception ex) {
             context.addMessage("formPessoa", new FacesMessage("Pessoa não pode ser inserida"));
             Logger.getLogger(PessoaBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,9 +78,17 @@ public class PessoaBean {
     public void alterar(){
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            daoPessoa.edit(pessoa);
-            pessoa = new Pessoa();
-            context.addMessage("formPessoa", new FacesMessage("Pessoa foi alterada com sucesso!"));
+            String cpf = pessoa.getCpf().substring(0,3) + pessoa.getCpf().substring(4,7) 
+                       + pessoa.getCpf().substring(8,11) + pessoa.getCpf().substring(12,14);
+            if (isValidCPF(cpf)){
+                daoPessoa.edit(pessoa);
+                pessoa = new Pessoa();
+                context.addMessage("formPessoa", new FacesMessage("Pessoa foi alterada com sucesso!"));
+            }
+            else{
+                pessoa.setCpf("");
+                context.addMessage("formPessoa", new FacesMessage("CPF Inválido, Insira outro CPF!"));
+            }
         } catch (NonexistentEntityException ex) {
             context.addMessage("formPessoa", new FacesMessage("Error"));
             Logger.getLogger(PessoaBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,6 +111,24 @@ public class PessoaBean {
         }
         pesquisarPessoas();
     }
+
+    private static int calcularDigito(String str, int[] peso) {
+        int soma = 0;
+        for (int indice=str.length()-1, digito; indice >= 0; indice-- ) {
+            digito = Integer.parseInt(str.substring(indice,indice+1));
+            soma += digito*peso[peso.length-str.length()+indice];
+        }
+        soma = 11 - soma % 11;
+        return soma > 9 ? 0 : soma;
+    }
+
+    public boolean isValidCPF(String cpf) {
+        if ((cpf==null) || (cpf.length()!=11)) return false;
+
+        Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
+        Integer digito2 = calcularDigito(cpf.substring(0,9) + digito1, pesoCPF);
+        return cpf.equals(cpf.substring(0,9) + digito1.toString() + digito2.toString());
+   }
 
     /**
      * @return the pessoas
