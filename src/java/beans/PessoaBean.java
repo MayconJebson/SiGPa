@@ -123,7 +123,16 @@ public class PessoaBean {
     }
 
     public boolean isValidCPF(String cpf) {
-        if ((cpf==null) || (cpf.length()!=11)) return false;
+        
+        boolean equals = true;
+        
+        for (int i = 1; i < cpf.length(); i++) {
+            if (!cpf.substring(i,i+1).equals(cpf.substring(0,1))){
+                equals = false;
+            }
+        }
+        
+        if ((cpf==null) || (cpf.length()!=11) || equals) return false;
 
         Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
         Integer digito2 = calcularDigito(cpf.substring(0,9) + digito1, pesoCPF);
